@@ -28,6 +28,10 @@ export default function TodoList() {
     setTodoItems(todoItems.filter((item) => item.id !== id));
   }
 
+  function handleDeleteAll() {
+    setTodoItems([]);
+  }
+
   function handleInputChange(e) {
     setInputDesc(e.target.value);
     setValidation('');
@@ -50,10 +54,10 @@ export default function TodoList() {
           />
 
           <div className="form-footer">
+            <div className="form-validation">{validation}</div>
             <button className="btn btn-submit" type="submit">
               Insert task
             </button>
-            <div className="form-validation">{validation}</div>
           </div>
         </form>
       </div>
@@ -71,6 +75,11 @@ export default function TodoList() {
             </li>
           ))}
         </ul>
+        <div className="list-footer">
+          <button className="btn btn-danger" onClick={handleDeleteAll}>
+            delete all tasks
+          </button>
+        </div>
       </div>
     </div>
   );
