@@ -5,6 +5,11 @@ export default function TodoList() {
   const [inputDesc, setInputDesc] = useState('');
   const [validation, setValidation] = useState('');
 
+  if (todoItems.length === 0) {
+    const localItems = JSON.parse(localStorage.getItem('todoList'));
+    localItems && setTodoItems(localItems);
+  }
+
   function handleInsertSubmit(e) {
     e.preventDefault();
 
@@ -13,23 +18,28 @@ export default function TodoList() {
       return;
     }
 
-    setTodoItems([
+    const todoItemsNew = [
       ...todoItems,
       {
         id: new Date(),
         desc: inputDesc,
       },
-    ]);
+    ];
+    setTodoItems(todoItemsNew);
     setInputDesc('');
     setValidation('');
+    localStorage.setItem('todoList', JSON.stringify(todoItemsNew));
   }
 
   function handleDeleteTask(id) {
-    setTodoItems(todoItems.filter((item) => item.id !== id));
+    const todoItemsNew = todoItems.filter((item) => item.id !== id);
+    setTodoItems(todoItemsNew);
+    localStorage.setItem('todoList', JSON.stringify(todoItemsNew));
   }
 
   function handleDeleteAll() {
     setTodoItems([]);
+    localStorage.setItem('todoList', JSON.stringify([]));
   }
 
   function handleInputChange(e) {
