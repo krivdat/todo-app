@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import InsertForm from './InsertForm.js';
 import ListItems from './ListItems.js';
 
@@ -8,6 +8,14 @@ export default function TodoList() {
   );
   const [inputDesc, setInputDesc] = useState('');
   const [validation, setValidation] = useState('');
+
+  useEffect(() => {
+    if (todoItems.length === 0) {
+      document.title = 'TODO App - list empty';
+    } else {
+      document.title = `TODO App - ${todoItems.length} items`;
+    }
+  });
 
   function handleInsertSubmit(e) {
     e.preventDefault();
