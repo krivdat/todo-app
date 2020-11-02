@@ -121,8 +121,7 @@ body {
 }
 
 .list-items li {
-  margin-top: 0.5rem;
-  padding: 0.3rem 1rem;
+  padding: 0.8rem 1rem 0.3rem;
   background-color: var(--highlight-clr);
   border-bottom: 1px solid #9abbf0;
   display: flex;
