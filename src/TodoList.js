@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
+import InsertForm from './InsertForm.js';
+import ListItems from './ListItems.js';
 
 export default function TodoList() {
-  const [todoItems, setTodoItems] = useState([]);
+  const [todoItems, setTodoItems] = useState(
+    JSON.parse(localStorage.getItem('todoList')) || []
+  );
   const [inputDesc, setInputDesc] = useState('');
   const [validation, setValidation] = useState('');
-
-  if (todoItems.length === 0) {
-    const localItems = JSON.parse(localStorage.getItem('todoList'));
-    localItems && setTodoItems(localItems);
-  }
 
   function handleInsertSubmit(e) {
     e.preventDefault();
@@ -21,7 +20,7 @@ export default function TodoList() {
     const todoItemsNew = [
       ...todoItems,
       {
-        id: new Date(),
+        id: Date.now(),
         desc: inputDesc,
       },
     ];
@@ -39,7 +38,7 @@ export default function TodoList() {
 
   function handleDeleteAll() {
     setTodoItems([]);
-    localStorage.setItem('todoList', JSON.stringify([]));
+    localStorage.removeItem('todoList');
   }
 
   function handleInputChange(e) {
@@ -49,48 +48,20 @@ export default function TodoList() {
 
   return (
     <div className="todo-list">
-      <div className="insert-form">
-        <form onSubmit={handleInsertSubmit}>
-          <label className="input-label" htmlFor="task-desc">
-            Task description:
-          </label>
-          <input
-            className="input-text"
-            type="text"
-            id="task-desc"
-            name="task-desc"
-            value={inputDesc}
-            onChange={(e) => handleInputChange(e)}
-          />
+      <InsertForm
+        inputDesc={inputDesc}
+        validation={validation}
+        onInsertSubmit={handleInsertSubmit}
+        onInputChange={handleInputChange}
+      />
 
-          <div className="form-footer">
-            <div className="form-validation">{validation}</div>
-            <button className="btn btn-submit" type="submit">
-              Insert task
-            </button>
-          </div>
-        </form>
-      </div>
       <div className="filter-form hidden">filter-form</div>
-      <div className="list-items">
-        <ul>
-          {todoItems.map((item) => (
-            <li key="item.id">
-              <span className="item-description">{item.desc}</span>
-              <span
-                className="icon icon-delete"
-                onClick={() => handleDeleteTask(item.id)}
-                alt="delete task"
-              ></span>
-            </li>
-          ))}
-        </ul>
-        <div className="list-footer">
-          <button className="btn btn-danger" onClick={handleDeleteAll}>
-            delete all tasks
-          </button>
-        </div>
-      </div>
+
+      <ListItems
+        todoItems={todoItems}
+        onDeleteTask={handleDeleteTask}
+        onDeleteAll={handleDeleteAll}
+      />
     </div>
   );
 }
