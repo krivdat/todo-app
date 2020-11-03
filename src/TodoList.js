@@ -11,11 +11,11 @@ export default function TodoList() {
 
   useEffect(() => {
     if (todoItems.length === 0) {
-      document.title = 'TODO App - list empty';
+      document.title = 'TODO App - empty';
     } else {
       document.title = `TODO App - ${todoItems.length} items`;
     }
-  });
+  }, [todoItems]);
 
   function handleInsertSubmit(e) {
     e.preventDefault();
