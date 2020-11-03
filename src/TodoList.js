@@ -4,7 +4,7 @@ import ListItems from './ListItems.js';
 
 export default function TodoList() {
   const [todoItems, setTodoItems] = useState(
-    JSON.parse(localStorage.getItem('todoList')) || []
+    () => JSON.parse(localStorage.getItem('todoList')) || []
   );
   const [inputDesc, setInputDesc] = useState('');
   const [validation, setValidation] = useState('');
@@ -15,6 +15,8 @@ export default function TodoList() {
     } else {
       document.title = `TODO App - ${todoItems.length} items`;
     }
+    // store updated data to localstorage
+    localStorage.setItem('todoList', JSON.stringify(todoItems));
   }, [todoItems]);
 
   function handleInsertSubmit(e) {
@@ -35,18 +37,15 @@ export default function TodoList() {
     setTodoItems(todoItemsNew);
     setInputDesc('');
     setValidation('');
-    localStorage.setItem('todoList', JSON.stringify(todoItemsNew));
   }
 
   function handleDeleteTask(id) {
     const todoItemsNew = todoItems.filter((item) => item.id !== id);
     setTodoItems(todoItemsNew);
-    localStorage.setItem('todoList', JSON.stringify(todoItemsNew));
   }
 
   function handleDeleteAll() {
     setTodoItems([]);
-    localStorage.removeItem('todoList');
   }
 
   function handleInputChange(e) {
