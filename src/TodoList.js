@@ -3,19 +3,18 @@ import InsertForm from './InsertForm.js';
 import ListItems from './ListItems.js';
 
 export default function TodoList() {
-  const [todoItems, setTodoItems] = useState(
-    () => JSON.parse(localStorage.getItem('todoList')) || []
-  );
+  const [todoItems, setTodoItems] = useState([]);
   const [inputDesc, setInputDesc] = useState('');
-  const [validation, setValidation] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('default');
+  const [validation, setValidation] = useState(true);
 
+  // load data from localstorage on first run
   useEffect(() => {
-    if (todoItems.length === 0) {
-      document.title = 'TODO App - empty';
-    } else {
-      document.title = `TODO App - ${todoItems.length} items`;
-    }
-    // store updated data to localstorage
+    setTodoItems(JSON.parse(localStorage.getItem('todoList')) || []);
+  }, []);
+
+  // store updated data to localstorage
+  useEffect(() => {
     localStorage.setItem('todoList', JSON.stringify(todoItems));
   }, [todoItems]);
 
@@ -32,6 +31,7 @@ export default function TodoList() {
       {
         id: Date.now(),
         desc: inputDesc,
+        category: selectedCategory,
       },
     ];
     setTodoItems(todoItemsNew);
@@ -53,6 +53,10 @@ export default function TodoList() {
     setValidation('');
   }
 
+  function handleCategoryChange(e) {
+    setSelectedCategory(e.target.value);
+  }
+
   return (
     <div className="todo-list">
       <InsertForm
@@ -60,12 +64,14 @@ export default function TodoList() {
         validation={validation}
         onInsertSubmit={handleInsertSubmit}
         onInputChange={handleInputChange}
+        onCategoryChange={handleCategoryChange}
       />
 
       <div className="filter-form hidden">filter-form</div>
 
       <ListItems
         todoItems={todoItems}
+        selectedCategory={selectedCategory}
         onDeleteTask={handleDeleteTask}
         onDeleteAll={handleDeleteAll}
       />

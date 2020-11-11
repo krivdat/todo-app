@@ -16,8 +16,21 @@ export default function InsertForm(props) {
           onChange={props.onInputChange}
         />
 
+        <div className="form-validation">{props.validation}</div>
+
         <div className="form-footer">
-          <div className="form-validation">{props.validation}</div>
+          <label classname="input-label" htmlFor="cat-sel">
+            Select list:
+          </label>
+          <select
+            id="cat-sel"
+            className="category-selector"
+            onChange={props.onCategoryChange}
+          >
+            <option value="main">default</option>
+            <option value="shopping">shopping</option>
+            <option value="coding">coding</option>
+          </select>
           <button className="btn btn-submit" type="submit">
             Insert task
           </button>
